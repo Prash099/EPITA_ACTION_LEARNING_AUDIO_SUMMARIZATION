@@ -1,0 +1,10 @@
+streamlit
+# youtube_dl
+librosa
+SpeechRecognition
+pydub
+youtube_transcript_api
+spacy
+fastapi 
+uvicorn
+python-multipart

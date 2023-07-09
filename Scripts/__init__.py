@@ -1,0 +1,1 @@
+SUMMARY_LENGTH = 0.3
