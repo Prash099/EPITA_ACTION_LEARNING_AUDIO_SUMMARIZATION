@@ -63,6 +63,21 @@ def extract_text_from_url():
         return jsonify({'error': 'Failed to extract text from the website.'}), 500
     
 
+@app.route('/extract_url_text_wiki', methods=['POST'])
+def extract_text_from_url_wiki():
+    if not request.json or 'url' not in request.json:
+        return jsonify({'error': 'Invalid request. Please provide a valid JSON payload with "url".'}), 400
+
+    url = request.json['url']
+    scraper = URLScraper()
+    extracted_text = scraper.extract_text_from_wiki(url)
+
+    if extracted_text:
+        return jsonify({'extracted_text': extracted_text}), 200
+    else:
+        return jsonify({'error': 'Failed to extract text from the website.'}), 500
+    
+
 
 @app.route('/summarize_passages', methods=['POST'])
 def summarize_passage_text():

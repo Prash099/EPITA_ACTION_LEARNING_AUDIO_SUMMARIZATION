@@ -12,6 +12,14 @@ def extract_text_from_website(url):
     else:
         return None
     
+def extract_text_from_wiki(url):
+    response = requests.post("http://127.0.0.1:5000/extract_url_text_wiki", json={"url": url})
+    if response.status_code == 200:
+        data = response.json()
+        return data.get("extracted_text")
+    else:
+        return None
+    
 def extract_text_from_youtube(youtube_link):
     response = requests.post("http://127.0.0.1:5000/extract_audio_youtube", json={"youtube_link": youtube_link})
     if response.status_code == 200:
@@ -76,28 +84,52 @@ def make_summarization():
         st.experimental_set_query_params(youtube_link=youtube_link)
 
     elif input_option == 'Web URL':
-        url = st.text_input('Enter URL:', value='Your URL')
+        st.write('Select the source of the website URL:')
+        source_option = st.radio('Source:', ['Wikipedia', 'Others'])
+        if source_option == 'Wikipedia':
+            url = st.text_input('Enter Wikipedia URL:', value='https://en.wikipedia.org/wiki/Main_Page')
+        else:
+            url = st.text_input('Enter URL:', value='Your URL')
         extract_text_option = st.button('Text Extraction')
         extracted_text = st.empty()
         if extract_text_option:
-            extracted_text.write('Extracted text from the website URL:')
-            extracted_text_input = st.text_input('', extract_text_from_website(url))
-            st.session_state['web_text'] = extracted_text_input
+            if source_option == 'Wikipedia':
+                extracted_text.write('Extracted text from the Wikipedia URL:')
+                extracted_text_input = st.text_input('', extract_text_from_wiki(url))
+                st.session_state['web_text'] = extracted_text_input
+            else:
+                extracted_text.write('Extracted text from the website URL:')
+                extracted_text_input = st.text_input('', extract_text_from_website(url))
+                st.session_state['web_text'] = extracted_text_input
 
         if st.button('Edit'):
-            extracted_text.write('Extracted text from the website URL:')
-            extracted_text_input = st.text_input('', st.session_state['web_text'])
-            st.session_state['web_text'] = extracted_text_input
+            if source_option == 'Wikipedia':
+                extracted_text.write('Extracted text from the website URL:')
+                extracted_text_input = st.text_input('', st.session_state['web_text'])
+                st.session_state['web_text'] = extracted_text_input
+            else:
+                extracted_text.write('Extracted text from the website URL:')
+                extracted_text_input = st.text_input('', st.session_state['web_text'])
+                st.session_state['web_text'] = extracted_text_input
+
 
         if st.button('Summarize'):
-            st.write('Extracted text from the website URL:')
-            st.write(st.session_state['web_text'])
-            st.write('Summarized result from the website URL:')
-            summarized_result = generate_summary_passages(st.session_state['web_text'])
-            if summarized_result:
-                st.write(summarized_result)
+            if source_option == 'Wikipedia':
+                st.write('Extracted text from the Wikipedia URL:')
+                st.write(st.session_state['web_text'])
+                st.write('Summarized result from the website URL:')
+                summarized_result = generate_summary_passages(st.session_state['web_text'])
+                if summarized_result:
+                    st.write(summarized_result)
+            else:
+                st.write('Extracted text from the website URL:')
+                st.write(st.session_state['web_text'])
+                st.write('Summarized result from the website URL:')
+                summarized_result = generate_summary_passages(st.session_state['web_text'])
+                if summarized_result:
+                    st.write(summarized_result)
 
-        st.experimental_set_query_params(url=url)
+            st.experimental_set_query_params(url=url)
 
     elif input_option == 'Local Audio':
         local_audio = st.file_uploader('Upload local audio file:', type=['mp3', 'wav'])
@@ -127,7 +159,7 @@ def make_summarization():
         text_transcript = st.text_area('Enter text transcript:', value='Your text transcript')
 
         if st.button('Summarize'):
-            st.write('Extracted text from text transcript:')
+            st.write('Input text transcript:')
             st.write(text_transcript)
             st.write('Summarized result from text transcript:')
             summarized_result = generate_summary_passages(text_transcript)
@@ -136,20 +168,10 @@ def make_summarization():
 
         st.experimental_set_query_params(text_transcript=text_transcript)
 
-def show_past_summaries():
-    st.title('Past Summaries')
 
-    past_summaries = pd.DataFrame({
-        'ID': [1, 2, 3, 4],
-        'Type': ['YouTube URL', 'Local Audio', 'Web URL', 'Text Transcript'],
-        'Transcript': ['', '', '', ''],
-        'Summary': ['', '', '', '']
-    })
-    st.table(past_summaries)
 
-nav_option = st.sidebar.selectbox('Select page:', ['Make Summarization', 'Past Summaries'])
+nav_option = st.sidebar.selectbox('Select page:', ['Make Summarization'])
 
 if nav_option == 'Make Summarization':
     make_summarization()
-elif nav_option == 'Past Summaries':
-    show_past_summaries()
+

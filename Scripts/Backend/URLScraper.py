@@ -28,3 +28,25 @@ class URLScraper:
         except Exception as e:
             self.logger.error(f"Error occurred while extracting from {url}: {e}")
             return None
+
+    def extract_text_from_wiki(self, url):
+        extracted_text = ""
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.content, 'html.parser')
+                paragraphs = soup.find_all('p')
+                for paragraph in paragraphs:
+                    extracted_text += str((paragraph.get_text()))
+            else:
+                print(f"Failed to retrieve the URL. Status code: {response.status_code}")
+                self.logger.info(f"Successfully extracted text from: {url}")
+            return extracted_text
+
+        except requests.exceptions.RequestException as e:
+            self.logger.error(f"Request Exception occurred while extracting from {url}: {e}")
+            return None
+        except Exception as e:
+            self.logger.error(f"Error occurred while extracting from {url}: {e}")
+            return None

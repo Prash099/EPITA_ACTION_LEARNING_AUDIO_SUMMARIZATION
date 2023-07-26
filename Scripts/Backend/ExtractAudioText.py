@@ -1,6 +1,6 @@
 import logging
 from youtube_transcript_api import YouTubeTranscriptApi
-from Scripts import API_TOKEN, API_URL, headers
+from Scripts import API_URL, headers, API_URL_
 import requests
 
 
@@ -33,6 +33,7 @@ class ExtractAudioText:
         try:
             data = audio_file.read()
             response = requests.post(API_URL, headers=headers, data=data)
+            # response = requests.post(API_URL_, headers=headers, data=data)
             self.logger.info("Transcript extracted successfully from the audio.")
             return response.json()['text']
 

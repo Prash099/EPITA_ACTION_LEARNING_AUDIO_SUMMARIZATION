@@ -1,6 +1,6 @@
 streamlit
 flask
-BeautifulSoup
+bs4
 requests
 pydub
 SpeechRecognition
@@ -10,3 +10,4 @@ sentencepiece
 torchaudio
 tokenizers==0.13.3
 keras
+youtube_transcript_api
