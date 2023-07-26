@@ -1,2 +1,40 @@
-# EPITA_ACTION_LEARNING_AUDIO_SUMMARIZATION
-This Audio Summarization Project is a Part of Action Learning Course by EPITA.
+AuSuMM - Audio Summarization
+
+
+## About
+
+This project is a part of Action Learning Course by EPITA Master's program. We have used the folowing for this project.
+
+- Postgres
+- FlaskAPI
+- HuggingFace Transformers
+- Streamlit
+
+## Authors
+
+- Prashanth Raghavendra Rao
+- Vishal Muralikumar
+- Sela Koshy
+
+
+
+
+## Installation
+
+To run this project open terminal and run this code.
+
+```bash
+  pip install -r requirements.txt
+```
+
+After Successful Installing, Do this step to run FlaskAPI
+
+```bash
+  python main.py
+```
+
+To run the WebApp, type the below code
+
+```bash
+  streamlit run frontend.py
+```
