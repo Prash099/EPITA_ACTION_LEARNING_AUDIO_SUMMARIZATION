@@ -1,6 +1,6 @@
 import logging
 from youtube_transcript_api import YouTubeTranscriptApi
-from Scripts import API_URL, headers, API_URL_
+from Scripts import API_URL, headers
 import requests
 
 
@@ -23,7 +23,6 @@ class ExtractAudioText:
                 video_id = youtube_link.split("v=")[1]
             transcript = YouTubeTranscriptApi.get_transcript(video_id)
             text = " ".join([line['text'] for line in transcript])
-            print(text)
             return text
         except Exception:
             return text

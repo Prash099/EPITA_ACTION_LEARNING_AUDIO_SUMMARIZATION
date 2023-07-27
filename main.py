@@ -99,7 +99,7 @@ def qa_summarize_texts():
     try:
         data = request.get_json()
         input_text = data['text']
-        summary = qa_summarizer.summarize_qa_texts(input_text)
+        summary = qa_summarizer.summarize_qa_texts(input_text)[0]['generated_text']
         if summary:
             return jsonify({"summary": summary}), 200
         else:

@@ -2,7 +2,7 @@ import requests
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title='Audio Summarization', layout='wide')
+st.set_page_config(page_title='AuSUMM', layout='wide')
 
 def extract_text_from_website(url):
     response = requests.post("http://127.0.0.1:5000/extract_url_text", json={"url": url})
@@ -38,7 +38,7 @@ def extract_text_from_local_audio(audio_file):
         return "Text extraction failed. Please try again later."
 
 def generate_summary_passages(text):
-    response = requests.post("http://127.0.0.1:5000/summarize_passages", json={"text": text})
+    response = requests.post("http://127.0.0.1:5000/summarize_passages", json={"text": text.lower()})
     if response.status_code == 200:
         data = response.json()
         return data.get("summary")
@@ -46,7 +46,7 @@ def generate_summary_passages(text):
         return None
 
 def generate_qa_summary(text):
-    response = requests.post("http://127.0.0.1:5000/summarize_qa", json={"text": text})
+    response = requests.post("http://127.0.0.1:5000/summarize_qa", json={"text": text.lower()})
     if response.status_code == 200:
         data = response.json()
         return data.get("summary")
@@ -54,12 +54,16 @@ def generate_qa_summary(text):
         return None
 
 def make_summarization():
-    st.title('Audio Summarization')
-    st.write('Enter your audio or video URL, upload an audio file, or provide a text transcript.')
+    st.title('AuSUMM')
+    st.title('Audio Summarizing!...')
+    st.write('Enter your audio or video URL, upload an audio file, WebPage URL, or provide a text transcript.')
+    st.write('Summarization in just a few clicks!...')
 
     input_option = st.selectbox('Select your input:', ['YouTube URL', 'Local Audio', 'Web URL', 'Text Transcript'])
 
     if input_option == 'YouTube URL':
+        st.write('Select the type of Video:')
+        source_option = st.radio('Source:', ['Conversational Video', 'Non Conversational Video'])
         youtube_link = st.text_input('Enter URL:', value='Your URL')
         extract_text_option = st.button('Text Extraction')
         extracted_text = st.empty()
@@ -68,18 +72,23 @@ def make_summarization():
             extracted_text_input = st.text_input('', extract_text_from_youtube(youtube_link))
             st.session_state['youtube_text'] = extracted_text_input
 
-        if st.button('Edit'):
-            extracted_text.write('Extracted text from the YouTube URL:')
-            extracted_text_input = st.text_input('', st.session_state['youtube_text'])
-            st.session_state['youtube_text'] = extracted_text_input
+        # if st.button('Edit'):
+        #     extracted_text.write('Extracted text from the YouTube URL:')
+        #     extracted_text_input = st.text_input('', st.session_state['youtube_text'])
+        #     st.session_state['youtube_text'] = extracted_text_input
 
         if st.button('Summarize'):
             st.write('Extracted text from the YouTube URL:')
             st.write(st.session_state['youtube_text'])
             st.write('Summarized result from the YouTube URL:')
-            summarized_result = generate_summary_passages(st.session_state['youtube_text'])
-            if summarized_result:
-                st.write(summarized_result)
+            if source_option == 'Conversational Video':
+                summarized_result = generate_qa_summary(st.session_state['youtube_text'])
+                if summarized_result:
+                    st.write(summarized_result)
+            else:
+                summarized_result = generate_summary_passages(st.session_state['youtube_text'])
+                if summarized_result:
+                    st.write(summarized_result)
 
         st.experimental_set_query_params(youtube_link=youtube_link)
 
@@ -102,15 +111,15 @@ def make_summarization():
                 extracted_text_input = st.text_input('', extract_text_from_website(url))
                 st.session_state['web_text'] = extracted_text_input
 
-        if st.button('Edit'):
-            if source_option == 'Wikipedia':
-                extracted_text.write('Extracted text from the website URL:')
-                extracted_text_input = st.text_input('', st.session_state['web_text'])
-                st.session_state['web_text'] = extracted_text_input
-            else:
-                extracted_text.write('Extracted text from the website URL:')
-                extracted_text_input = st.text_input('', st.session_state['web_text'])
-                st.session_state['web_text'] = extracted_text_input
+        # if st.button('Edit'):
+        #     if source_option == 'Wikipedia':
+        #         extracted_text.write('Extracted text from the website URL:')
+        #         extracted_text_input = st.text_input('', st.session_state['web_text'])
+        #         st.session_state['web_text'] = extracted_text_input
+        #     else:
+        #         extracted_text.write('Extracted text from the website URL:')
+        #         extracted_text_input = st.text_input('', st.session_state['web_text'])
+        #         st.session_state['web_text'] = extracted_text_input
 
 
         if st.button('Summarize'):
@@ -140,10 +149,10 @@ def make_summarization():
             extracted_text_input = st.text_input('', extract_text_from_local_audio(local_audio))
             st.session_state['audio_text'] = extracted_text_input
 
-        if st.button('Edit'):
-            extracted_text.write('Extracted text from local audio file:')
-            extracted_text_input = st.text_input('', st.session_state['audio_text'])
-            st.session_state['audio_text'] = extracted_text_input
+        # if st.button('Edit'):
+        #     extracted_text.write('Extracted text from local audio file:')
+        #     extracted_text_input = st.text_input('', st.session_state['audio_text'])
+        #     st.session_state['audio_text'] = extracted_text_input
 
         if st.button('Summarize'):
             st.write('Extracted text from local audio file:')

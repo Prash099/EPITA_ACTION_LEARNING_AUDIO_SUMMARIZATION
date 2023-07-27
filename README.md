@@ -16,10 +16,11 @@ This project is a part of Action Learning Course by EPITA Master's program. We h
 - Vishal Muralikumar
 - Sela Koshy
 
+## Try App
 
+https://ausumm.streamlit.app/
 
-
-## Installation
+## Installation (Local)
 
 To run this project open terminal and run this code.
 
