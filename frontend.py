@@ -5,7 +5,7 @@ import pandas as pd
 st.set_page_config(page_title='AuSUMM', layout='wide')
 
 def extract_text_from_website(url):
-    response = requests.post("http://127.0.0.1:5000/extract_url_text", json={"url": url})
+    response = requests.post("http://0.0.0.0:5000/extract_url_text", json={"url": url})
     if response.status_code == 200:
         data = response.json()
         return data.get("extracted_text")
@@ -13,7 +13,7 @@ def extract_text_from_website(url):
         return None
     
 def extract_text_from_wiki(url):
-    response = requests.post("http://127.0.0.1:5000/extract_url_text_wiki", json={"url": url})
+    response = requests.post("http://0.0.0.0:5000/extract_url_text_wiki", json={"url": url})
     if response.status_code == 200:
         data = response.json()
         return data.get("extracted_text")
@@ -21,7 +21,7 @@ def extract_text_from_wiki(url):
         return None
     
 def extract_text_from_youtube(youtube_link):
-    response = requests.post("http://127.0.0.1:5000/extract_audio_youtube", json={"youtube_link": youtube_link})
+    response = requests.post("http://0.0.0.0:5000/extract_audio_youtube", json={"youtube_link": youtube_link})
     if response.status_code == 200:
         data = response.json()
         return data.get("audio_transcript")
@@ -30,7 +30,7 @@ def extract_text_from_youtube(youtube_link):
 
 def extract_text_from_local_audio(audio_file):
     files = {'audio': audio_file}
-    response = requests.post("http://127.0.0.1:5000/extract_text", files=files)
+    response = requests.post("http://0.0.0.0:5000/extract_text", files=files)
     if response.status_code == 200:
         extracted_text = response.json().get('text')
         return extracted_text
@@ -38,7 +38,7 @@ def extract_text_from_local_audio(audio_file):
         return "Text extraction failed. Please try again later."
 
 def generate_summary_passages(text):
-    response = requests.post("http://127.0.0.1:5000/summarize_passages", json={"text": text.lower()})
+    response = requests.post("http://0.0.0.0:5000/summarize_passages", json={"text": text.lower()})
     if response.status_code == 200:
         data = response.json()
         return data.get("summary")
@@ -46,7 +46,7 @@ def generate_summary_passages(text):
         return None
 
 def generate_qa_summary(text):
-    response = requests.post("http://127.0.0.1:5000/summarize_qa", json={"text": text.lower()})
+    response = requests.post("http://0.0.0.0:5000/summarize_qa", json={"text": text.lower()})
     if response.status_code == 200:
         data = response.json()
         return data.get("summary")
