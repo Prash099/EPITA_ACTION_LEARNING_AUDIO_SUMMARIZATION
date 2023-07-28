@@ -48,6 +48,10 @@ def extract_audio_text_youtube():
 
 
 
+@app.route('/')
+def hello_world():
+    return 'Hello from AuSUMM Flask!'
+
 @app.route('/extract_url_text', methods=['POST'])
 def extract_text_from_url():
     if not request.json or 'url' not in request.json:

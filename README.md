@@ -1,11 +1,9 @@
-AuSuMM - Audio Summarization
-
+# AuSuMM - Audio Summarization
 
 ## About
 
 This project is a part of Action Learning Course by EPITA Master's program. We have used the folowing for this project.
 
-- Postgres
 - FlaskAPI
 - HuggingFace Transformers
 - Streamlit
@@ -14,11 +12,10 @@ This project is a part of Action Learning Course by EPITA Master's program. We h
 
 - Prashanth Raghavendra Rao
 - Vishal Muralikumar
-- Sela Koshy
 
 ## Try App
 
-https://ausumm.streamlit.app/
+<https://ausumm.streamlit.app/>
 
 ## Installation (Local)
 
