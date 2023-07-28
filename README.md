@@ -1,4 +1,4 @@
-# AuSuMM - Audio Summarization
+# AuSUMM - Audio Summarization
 
 ## About
 
